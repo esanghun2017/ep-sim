@@ -187,6 +187,15 @@ body.loss #toast.ok{background:#C4001A}
 .live table.hm th,table.hm th{font-size:10px!important;letter-spacing:-.2px;padding:0 3px!important}
 table.hm th.rw{min-width:50px!important;padding-right:6px!important;padding-left:4px!important}
 table.hm td,table.hm th{min-width:34px}
+.cpairs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:6px 0 14px}
+.cpg{background:var(--bg);border-radius:12px;padding:10px 12px}
+.cpg h4{margin:0;font-size:13.5px;font-weight:600;color:#1C1C1E}
+.cpg .cps{font-size:11px;color:var(--muted);margin:1px 0 6px;line-height:1.4}
+.cpr{display:grid;grid-template-columns:96px 1fr 34px;gap:8px;align-items:center;font-size:12.5px;padding:4px 0}
+.cpr b{font-weight:600;white-space:nowrap}.cpr .tk{height:7px;border-radius:4px;background:#fff;overflow:hidden}.cpr .tk i{display:block;height:100%;border-radius:4px}
+.cpr .v{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+table.hm td.pk{box-shadow:inset 0 0 0 2px #1C1C1E}
+@media(max-width:640px){.cpairs{grid-template-columns:1fr}}
 </style></head><body><div id="ptr"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v5h-5"/></svg></div><div class="wrap">
 <div id="mkt" class="mkt top"></div>
 <div class="titlebar"><h1>Enhanced Portfolio</h1></div>
@@ -256,6 +265,7 @@ table.hm td,table.hm th{min-width:34px}
  <div class="rpanel"><div class="rph">Dividend calendar</div><div class="n rsub">Expected dividends by month, all holdings (CAD)</div><div class="dcal" id="d_cal"></div><div class="ctake" id="d_take"></div></div>
  <div class="rpanel"><div class="rph">Where each stock sits in its 52-week range</div><div class="n rsub">Left = near the 1-year low, right = near the high · ★ = on your buy list above</div><div id="h_list"></div></div>
  <div class="rpanel"><div class="rph">How your stocks move together</div><div class="n rsub">Correlation of daily returns, past year (1.0 = move together, 0 = unrelated, below 0 = opposite) · swipe sideways on a phone</div>
+  <div class="cpairs" id="hm_pairs"></div>
   <div style="overflow-x:auto"><table class="hm" id="hm"></table></div><div class="ctake" id="hm_take"></div></div>
 </div>
 <div class="sec" id="lsec"><h3>By sector vs S&amp;P 500</h3>
@@ -275,7 +285,7 @@ table.hm td,table.hm th{min-width:34px}
 </div>
 <div class="foot">
 Correlation and beta use the past year of daily returns (Canadian stocks in CAD, U.S. stocks in USD). Dividend yields are based on 2026 public data; GOOGL and LLY are estimates.<br>
-Correlations change over time and past data does not guarantee future results. “To reach target” compares your core 14 holdings with the Target % column in your sheet (or the 78% plan if that column is empty), using the market values in your sheet. Side positions (AEM, ATRL, TRI, WPM, FBTC) are listed separately. Correlation, beta, Canada and Big Tech use the core 14 only. For analysis only, not investment advice.<br><span style="opacity:.7">Version 7.10.0 · Nov 24, 2026</span>
+Correlations change over time and past data does not guarantee future results. “To reach target” compares your core 14 holdings with the Target % column in your sheet (or the 78% plan if that column is empty), using the market values in your sheet. Side positions (AEM, ATRL, TRI, WPM, FBTC) are listed separately. Correlation, beta, Canada and Big Tech use the core 14 only. For analysis only, not investment advice.<br><span style="opacity:.7">Version 7.11.0 · Nov 27, 2026</span>
 </div></div>
 <script>
 const D={"T":["MSFT","GOOGL","NVDA","LLY","AMZN","CNR","JPM","V","RY","CNQ","JNJ","ENB","COST","LIN","AEM","ATRL","TRI","WPM"],"Sig":[[4.55826,0.79899,1.23409,-0.27359,1.99947,-0.40967,0.35512,0.64231,0.31399,-0.62085,-0.50934,-0.38967,-0.16999,-0.1262,1.1308,0.5752,2.01897,1.31031],[0.79899,4.49274,1.12104,0.3145,2.74766,0.04763,0.43463,0.23609,0.56385,-1.08758,0.00399,-0.38097,-0.04298,-0.12875,1.14118,0.49482,0.30965,1.32681],[1.23409,1.12104,5.74808,-0.58031,1.22393,0.00799,0.51,-0.37449,0.66772,-0.39999,-0.66987,-0.2968,-0.97142,-0.38489,1.85529,1.43559,-1.4874,2.20812],[-0.27359,0.3145,-0.58031,4.93619,-0.07594,0.63229,0.39894,0.27073,0.13003,-0.21226,1.39286,0.26353,0.45833,0.30733,0.76255,-0.06719,0.70095,0.66066],[1.99947,2.74766,1.22393,-0.07594,4.5849,0.07877,0.57349,0.64113,0.47327,-1.19197,-0.20653,-0.50721,-0.01834,-0.18381,1.17162,0.63079,0.22029,1.58061],[-0.40967,0.04763,0.00799,0.63229,0.07877,1.84632,0.47663,0.14165,0.35032,-0.13056,0.40851,0.34036,0.28182,0.3993,0.62655,0.27619,0.09046,0.77361],[0.35512,0.43463,0.51,0.39894,0.57349,0.47663,2.0976,0.75078,0.82314,-0.5233,0.24953,0.01037,-0.02913,0.2453,1.0494,1.09281,0.08819,1.12231],[0.64231,0.23609,-0.37449,0.27073,0.64113,0.14165,0.75078,2.10577,0.25088,-0.59399,0.29708,-0.16745,0.46998,0.33954,0.10582,0.40546,1.74303,0.27934],[0.31399,0.56385,0.66772,0.13003,0.47327,0.35032,0.82314,0.25088,0.97654,-0.55348,0.03956,0.06361,-0.13914,0.05318,0.76042,0.67845,-0.18595,0.78687],[-0.62085,-1.08758,-0.39999,-0.21226,-1.19197,-0.13056,-0.5233,-0.59399,-0.55348,4.02078,-0.14893,0.92064,-0.03846,-0.09668,-1.20276,-0.48651,-0.22314,-1.2027],[-0.50934,0.00399,-0.66987,1.39286,-0.20653,0.40851,0.24953,0.29708,0.03956,-0.14893,1.7875,0.28035,0.51589,0.29942,0.20584,-0.20631,0.3393,0.25826],[-0.38967,-0.38097,-0.2968,0.26353,-0.50721,0.34036,0.01037,-0.16745,0.06361,0.92064,0.28035,1.24061,0.18432,0.18587,-0.47241,-0.23525,-0.07439,-0.48449],[-0.16999,-0.04298,-0.97142,0.45833,-0.01834,0.28182,-0.02913,0.46998,-0.13914,-0.03846,0.51589,0.18432,1.64215,0.33421,-0.31622,-0.3043,0.89688,-0.34002],[-0.1262,-0.12875,-0.38489,0.30733,-0.18381,0.3993,0.2453,0.33954,0.05318,-0.09668,0.29942,0.18587,0.33421,1.43344,0.6069,-0.16179,0.3938,0.57066],[1.1308,1.14118,1.85529,0.76255,1.17162,0.62655,1.0494,0.10582,0.76042,-1.20276,0.20584,-0.47241,-0.31622,0.6069,9.30052,1.81134,-1.10239,9.16621],[0.5752,0.49482,1.43559,-0.06719,0.63079,0.27619,1.09281,0.40546,0.67845,-0.48651,-0.20631,-0.23525,-0.3043,-0.16179,1.81134,5.2989,-0.10647,2.10632],[2.01897,0.30965,-1.4874,0.70095,0.22029,0.09046,0.08819,1.74303,-0.18595,-0.22314,0.3393,-0.07439,0.89688,0.3938,-1.10239,-0.10647,10.85682,-1.13538],[1.31031,1.32681,2.20812,0.66066,1.58061,0.77361,1.12231,0.27934,0.78687,-1.2027,0.25826,-0.48449,-0.34002,0.57066,9.16621,2.10632,-1.13538,10.71754]],"cs":[0.74517,0.94858,1.34904,0.18698,0.98592,0.20681,0.58442,0.25438,0.45083,-0.44318,-0.07138,-0.14793,-0.14669,0.04758,1.0948,0.74537,-0.00068,1.32746],"vs":0.72515,"y":[0.7,0.3,0.02,0.55,0.0,2.6,1.83,0.67,2.5,4.0,1.98,5.5,0.58,1.24,0.64,0.09,2.4,0.54]};
@@ -554,7 +564,12 @@ function renderPerf(){if(!H)return;const {w:aw,core}=actualW();const T=RISK.T;le
  const col=v=>v>=0?'rgba(0,122,255,'+Math.min(1,v*1.25).toFixed(2)+')':'rgba(255,59,48,'+Math.min(1,-v*2).toFixed(2)+')';
  let hm='<tr><th></th>'+ord.map(t=>'<th>'+t.slice(0,4)+'</th>').join('')+'</tr>';let pairs=[];
  ord.forEach((a,i)=>{hm+='<tr><th class="rw">'+a+'</th>';ord.forEach((b,j)=>{const v=i===j?1:CORR.C[ix(a)][ix(b)];if(j>i)pairs.push([a,b,v]);hm+='<td style="background:'+(i===j?'#E5E5EA':col(v))+';color:'+(v>0.45&&i!==j?'#fff':'var(--navy)')+'">'+(i===j?'':Math.round(v*100))+'</td>';});hm+='</tr>';});
- document.getElementById('hm').innerHTML=hm;pairs.sort((a,b)=>b[2]-a[2]);const avg=pairs.reduce((s,x)=>s+x[2],0)/pairs.length;
+ document.getElementById('hm').innerHTML=hm;pairs.sort((a,b)=>b[2]-a[2]);
+ {const top=pairs.slice(0,5),opp=pairs.slice().sort((a,b)=>a[2]-b[2]).slice(0,5),mark=new Set([...top,...opp].map(x=>x[0]+'|'+x[1]));
+  const row=(x,c)=>'<div class="cpr"><b>'+x[0]+' – '+x[1]+'</b><div class="tk"><i style="width:'+Math.min(100,Math.abs(x[2])/0.7*100).toFixed(0)+'%;background:'+c+'"></i></div><span class="v" style="color:'+c+'">'+(x[2]>0?'+':'')+x[2].toFixed(2)+'</span></div>';
+  document.getElementById('hm_pairs').innerHTML='<div class="cpg"><h4>Move together most</h4><div class="cps">When one goes up, the other usually goes up too.</div>'+top.map(x=>row(x,'#007AFF')).join('')+'</div>'
+   +'<div class="cpg"><h4>Move opposite most</h4><div class="cps">When one goes up, the other tends to go down, so they balance each other.</div>'+opp.map(x=>row(x,x[2]<0?'#FF3B30':'#8E8E93')).join('')+'</div>';
+  document.querySelectorAll('#hm tr').forEach((tr,ri)=>{if(!ri)return;tr.querySelectorAll('td').forEach((td,ci)=>{const a=ord[ri-1],b=ord[ci];if(mark.has(a+'|'+b)||mark.has(b+'|'+a))td.classList.add('pk');});});}const avg=pairs.reduce((s,x)=>s+x[2],0)/pairs.length;
  const neg=pairs.filter(x=>x[2]<0).sort((a,b)=>a[2]-b[2]).slice(0,3);
  document.getElementById('hm_take').innerHTML='Average pair: <b>'+avg.toFixed(2)+'</b>, so most of your stocks move on their own. Most alike: '+pairs.slice(0,3).map(x=>'<b>'+x[0]+'–'+x[1]+'</b> '+x[2].toFixed(2)).join(', ')+'.'+(neg.length?' Best offsets: '+neg.map(x=>'<b>'+x[0]+'–'+x[1]+'</b> '+x[2].toFixed(2)).join(', ')+'.':'')+' Numbers in each square ×100.';
  applyHide();}
